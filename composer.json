@@ -1,0 +1,29 @@
+{
+  "name": "kinetics254/hypernexus",
+  "description": "A Laravel package for integrating with Microsoft Dynamics 365 Business Central on-premises APIs",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Peter Karuga",
+      "email": "peter.karuga@kinetics.co.ke"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+    "illuminate/http": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "KTL\\Hypernexus\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "KTL\\Hypernexus\\Providers\\HypernexusServiceProvider"
+      ]
+    }
+  }
+}
