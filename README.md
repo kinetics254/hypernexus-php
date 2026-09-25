@@ -41,13 +41,25 @@ For NTLM authentication, PHP must have cURL support enabled.
 ---
 
 # Installation
+## From GitHub
 
-Install Hypernexus using Composer:
+If the package has not yet been published to Packagist, add the GitHub repository to your application's `composer.json`:
 
 ```bash
-composer require kinetics254/hypernexus
+"repositories": [ 
+    { 
+      "type": "vcs", 
+      "url": "https://github.com/kinetics254/hypernexus-php" 
+    }
+]
 ```
 
+Then require the package with a specific version:
+
+```bash
+composer require kinetics254/hypernexus:^0.1
+```
+For example, if the latest GitHub release is `v0.1.0`, Composer will resolve the `^0.1` constraint to a compatible `0.1.x` release.
 Laravel package discovery automatically registers the package service provider.
 
 You can verify the installation with:
