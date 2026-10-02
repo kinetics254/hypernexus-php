@@ -79,19 +79,30 @@ class BusinessCentralClient
         return match (strtolower($method)) {
             'get' => $request->get($endpoint, $query),
 
-            'post' => $request->post($endpoint, $data),
+            'post' => $request->post(
+                $this->withQuery($endpoint, $query),
+                $data
+            ),
 
             'put' => $request
                 ->withHeaders(['If-Match' => '*'])
-                ->put($endpoint, $data),
+                ->put(
+                    $this->withQuery($endpoint, $query),
+                    $data
+                ),
 
             'patch' => $request
                 ->withHeaders(['If-Match' => '*'])
-                ->patch($endpoint, $data),
+                ->patch(
+                    $this->withQuery($endpoint, $query),
+                    $data
+                ),
 
             'delete' => $request
                 ->withHeaders(['If-Match' => '*'])
-                ->delete($endpoint),
+                ->delete(
+                    $this->withQuery($endpoint, $query)
+                ),
 
             default => throw new \InvalidArgumentException(
                 "Unsupported HTTP method [{$method}]."
@@ -106,5 +117,21 @@ class BusinessCentralClient
         }
 
         return $query;
+    }
+
+    protected function withQuery(
+        string $endpoint,
+        array $query,
+    ): string {
+        if (empty($query)) {
+            return $endpoint;
+        }
+
+        return $endpoint . '?' . http_build_query(
+                $query,
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
     }
 }
