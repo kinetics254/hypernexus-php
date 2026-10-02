@@ -40,17 +40,19 @@ class BusinessCentralClient
             $headers,
         );
 
-        if ($response->successful()) {
-            $data = $response->json() ?? [];
-
-            if ($rawResponse) {
-                return $data;
-            }
-
-            return $data['value'] ?? $data;
+        if (! $response->successful()) {
+            throw ApiException::fromResponse($response);
         }
 
-        throw ApiException::fromResponse($response);
+        $data = $this->normalizeResponse(
+            $response->json()
+        );
+
+        if ($rawResponse) {
+            return $data;
+        }
+
+        return $data['value'] ?? $data;
     }
 
     protected function send(
@@ -133,5 +135,12 @@ class BusinessCentralClient
                 '&',
                 PHP_QUERY_RFC3986
             );
+    }
+
+    protected function normalizeResponse(mixed $data): array
+    {
+        return is_array($data)
+            ? $data
+            : [$data];
     }
 }
