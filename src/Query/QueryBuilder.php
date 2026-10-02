@@ -267,7 +267,10 @@ class QueryBuilder
             $params['$skiptoken'] = base64_decode($cursor);
         }
 
-        $response = $this->endpoint->get($params);
+        $response = $this->endpoint->get(
+            query: $params,
+            rawResponse: true,
+        );
 
         return new Paginator(
             items: $response['value'] ?? [],

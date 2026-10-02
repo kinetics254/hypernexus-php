@@ -30,6 +30,7 @@ class BusinessCentralClient
         array $query = [],
         array $data = [],
         array $headers = [],
+        bool $rawResponse = false,
     ): array {
         $response = $this->send(
             $method,
@@ -40,7 +41,13 @@ class BusinessCentralClient
         );
 
         if ($response->successful()) {
-            return $response->json() ?? [];
+            $data = $response->json() ?? [];
+
+            if ($rawResponse) {
+                return $data;
+            }
+
+            return $data['value'] ?? $data;
         }
 
         throw ApiException::fromResponse($response);

@@ -33,9 +33,9 @@ class BusinessCentral
         array $query = [],
     ): array {
         return $this->client->request(
-            'GET',
-            $endpoint,
-            $query,
+            method: 'GET',
+            endpoint: $endpoint,
+            query: $query,
         );
     }
 
@@ -44,8 +44,8 @@ class BusinessCentral
         array $data = [],
     ): array {
         return $this->client->request(
-            'POST',
-            $endpoint,
+            method: 'POST',
+            endpoint: $endpoint,
             data: $data,
         );
     }

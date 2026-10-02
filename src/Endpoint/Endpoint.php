@@ -33,12 +33,16 @@ class Endpoint
         );
     }
 
-    public function get(array $query = []): array
+    public function get(
+        array $query = [],
+        bool $rawResponse = false,
+    ): array
     {
         return $this->client->request(
-            'GET',
-            $this->path,
-            $query,
+            method: 'GET',
+            endpoint: $this->path,
+            query: $query,
+            rawResponse: $rawResponse,
         );
     }
 
