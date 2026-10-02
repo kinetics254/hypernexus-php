@@ -44,15 +44,13 @@ class BusinessCentralClient
             throw ApiException::fromResponse($response);
         }
 
-        $data = $this->normalizeResponse(
-            $response->json()
-        );
+        $data = $response->json();
 
         if ($rawResponse) {
             return $data;
         }
 
-        return $data['value'] ?? $data;
+        return $this->normalizeResponse($data['value'] ?? $data);
     }
 
     protected function send(
