@@ -50,7 +50,7 @@ class BusinessCentralClient
             return $data;
         }
 
-        return $this->normalizeResponse($data['value'] ?? $data);
+        return $this->prepareResponse($data['value'] ?? $data);
     }
 
     protected function send(
@@ -135,7 +135,7 @@ class BusinessCentralClient
             );
     }
 
-    protected function normalizeResponse(mixed $data): array
+    protected function prepareResponse(mixed $data): array
     {
         return is_array($data)
             ? $data

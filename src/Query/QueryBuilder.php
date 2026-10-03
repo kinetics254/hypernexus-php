@@ -190,7 +190,9 @@ class QueryBuilder
     {
         $response = $this
             ->query(['$count' => 'true'])
-            ->get();
+            ->get(
+                rawResponse: true
+            );
 
         return (int) ($response['@odata.count'] ?? 0);
     }
@@ -205,19 +207,23 @@ class QueryBuilder
 
         $response = $this->get();
 
-        return $response['value'][0] ?? null;
+        return $response[0] ?? null;
     }
 
-    public function get(array $fields = []): array
+    public function get(
+        array $fields = [],
+        bool $rawResponse = false,
+    ): array
     {
         if ($fields) {
             $this->select($fields);
         }
 
         return $this->client->request(
-            'GET',
-            $this->endpoint->path(),
-            $this->params,
+            method: 'GET',
+            endpoint: $this->endpoint->path(),
+            query: $this->params,
+            rawResponse: $rawResponse,
         );
     }
 
