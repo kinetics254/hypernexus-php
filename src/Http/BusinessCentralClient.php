@@ -12,7 +12,8 @@ class BusinessCentralClient
 {
     public function __construct(
         protected ?string $company = null,
-    ) {
+    )
+    {
     }
 
     public function company(?string $company): static
@@ -27,11 +28,12 @@ class BusinessCentralClient
     public function request(
         string $method,
         string $endpoint,
-        array $query = [],
-        array $data = [],
-        array $headers = [],
-        bool $rawResponse = false,
-    ): array {
+        array  $query = [],
+        array  $data = [],
+        array  $headers = [],
+        bool   $rawResponse = false,
+    ): array
+    {
         $response = $this->send(
             $method,
             $endpoint,
@@ -40,8 +42,12 @@ class BusinessCentralClient
             $headers,
         );
 
-        if (! $response->successful()) {
+        if (!$response->successful()) {
             throw ApiException::fromResponse($response);
+        }
+
+        if ($response->status() === 204 || $response->body() === '') {
+            return [];
         }
 
         $data = $response->json();
@@ -56,10 +62,11 @@ class BusinessCentralClient
     protected function send(
         string $method,
         string $endpoint,
-        array $query = [],
-        array $data = [],
-        array $headers = [],
-    ): Response {
+        array  $query = [],
+        array  $data = [],
+        array  $headers = [],
+    ): Response
+    {
         $request = Http::baseUrl(
             rtrim(config('hypernexus.base_url'), '/')
         )
@@ -79,10 +86,14 @@ class BusinessCentralClient
         return match (strtolower($method)) {
             'get' => $request->get($endpoint, $query),
 
-            'post' => $request->post(
-                $this->withQuery($endpoint, $query),
-                $data
-            ),
+            'post' => $data === []
+                ? $request
+                    ->withBody('{}', 'application/json')
+                    ->post($this->withQuery($endpoint, $query))
+                : $request->post(
+                    $this->withQuery($endpoint, $query),
+                    $data
+                ),
 
             'put' => $request
                 ->withHeaders(['If-Match' => '*'])
@@ -121,8 +132,9 @@ class BusinessCentralClient
 
     protected function withQuery(
         string $endpoint,
-        array $query,
-    ): string {
+        array  $query,
+    ): string
+    {
         if (empty($query)) {
             return $endpoint;
         }

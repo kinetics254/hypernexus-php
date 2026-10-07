@@ -74,6 +74,16 @@ class Endpoint
         );
     }
 
+    public function action(string|array $keys, string $name, array $body = []): array
+    {
+        return $this->client->request(
+            method: 'POST',
+            endpoint: $this->resourceUrl($keys) . '/Microsoft.NAV.' . $name,
+            data: $body,
+            headers: ['If-Match' => '*'],
+        );
+    }
+
     protected function resourceUrl(string|array $keys): string
     {
         return $this->path . ODataKey::format($keys);
